@@ -5,6 +5,18 @@ div.hero-content {
     margin-bottom: 60px;
 }
 
+/** Logo **/
+.navbar .navbar-brand {
+    display: block;
+}
+
+.navbar .navbar-brand>img {
+    display: block;
+    max-width: 100%;
+    margin: 0;
+}
+
+/** Hero Form **/
 div.hero-form-container {
     min-height: 558px;
     padding-top: 80px;
