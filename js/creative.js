@@ -175,17 +175,21 @@ let options = {
 $('[data-toggle="tooltip"]').tooltip()
 
 
-function sendMail(email, name, address, tel, callback) {
-  $.ajax({
-      type: "POST",
-      url: "sendlead.php",
-      data: "email=" + email + "&name=" + name + "&address=" + address + "&tel=" + tel,
-      cache: false,
-      success: function (result) {
-        callback()
-      }
+function sendMail(email, name, address, tel, formName, callback) {
+  var formData = 'form-name=' + formName + '&email=' + email + '&name=' + name + '&address=' + address + '&tel=' + tel;
+  fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: formData
+  })
+  .then(function(response) {
+    if (response.ok) {
+      callback();
+    }
+  })
+  .catch(function(error) {
+    console.error('Form submission error:', error);
   });
-  console.log('success sendlead')
 }
 
 
@@ -246,15 +250,16 @@ $('form').submit(function() {
     var email = encodeURI(form.find('input.email').val())
     var address = encodeURI(form.find('input.address').val())
     var tel = encodeURI(form.find('input.number').val())
+    var formName = form.attr('name') || 'contact';
 
     var getUrl = window.location;
-    var finalUrl = getUrl.protocol + "//" + getUrl.host + "/step2/?" 
+    var finalUrl = getUrl.protocol + "//" + getUrl.host + "/step2/?"
     + 'name=' + name + '&'
     + 'email=' + email + '&'
     + 'address=' + address + '&'
     + 'tel=' + tel;
 
-    sendMail(email, name, address, tel, function(){
+    sendMail(email, name, address, tel, formName, function(){
       $(form).trigger("reset");
       window.location.href = finalUrl;
     })
