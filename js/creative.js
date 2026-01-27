@@ -1,129 +1,6 @@
-// Prepare location info object.
-var locationInfo = {
-  geo: null,
-  country: null,
-  state: null,
-  city: null,
-  postalCode: null,
-  street: null,
-  streetNumber: null,
-  reset: function() {
-    this.geo = null;
-    this.country = null;
-    this.state = null;
-    this.city = null;
-    this.postalCode = null;
-    this.street = null;
-    this.streetNumber = null;
-  }
-};
-$(".fake-autofill-fields").show();
-        // some DOM manipulation/ajax here
-        window.setTimeout(function () {
-            $(".fake-autofill-fields").hide();
-        },1);
-googleAutocomplete = {
-  autocompleteField: function(fieldId) {
-    (autocomplete = new google.maps.places.Autocomplete(
-      document.getElementById(fieldId)
-    )),
-      { types: ["geocode"] };
-    google.maps.event.addListener(autocomplete, "place_changed", function() {
-      // Segment results into usable parts.
-      var place = autocomplete.getPlace(),
-        address = place.address_components,
-        lat = place.geometry.location.lat(),
-        lng = place.geometry.location.lng();
-
-      // Reset location object.
-      locationInfo.reset();
-
-      // Save the individual address components.
-      locationInfo.geo = [lat, lng];
-      for (var i = 0; i < address.length; i++) {
-        var component = address[i].types[0];
-        switch (component) {
-          case "country":
-            locationInfo.country = address[i]["long_name"];
-            break;
-          case "administrative_area_level_1":
-            locationInfo.state = address[i]["long_name"];
-            break;
-          case "locality":
-            locationInfo.city = address[i]["long_name"];
-            break;
-          case "postal_code":
-            locationInfo.postalCode = address[i]["long_name"];
-            break;
-          case "route":
-            locationInfo.street = address[i]["long_name"];
-            break;
-          case "street_number":
-            locationInfo.streetNumber = address[i]["long_name"];
-            break;
-          default:
-            break;
-        }
-      }
-    });
-  }
-};
-googleAutocomplete2 = {
-  autocompleteField: function(fieldId) {
-    (autocomplete2 = new google.maps.places.Autocomplete(
-      document.getElementById(fieldId)
-    )),
-      { types: ["geocode"] };
-    google.maps.event.addListener(autocomplete2, "place_changed", function() {
-      // Segment results into usable parts.
-      var place = autocomplete.getPlace(),
-        address = place.address_components,
-        lat = place.geometry.location.lat(),
-        lng = place.geometry.location.lng();
-
-      // Reset location object.
-      locationInfo.reset();
-
-      // Save the individual address components.
-      locationInfo.geo = [lat, lng];
-      for (var i = 0; i < address.length; i++) {
-        var component = address[i].types[0];
-        switch (component) {
-          case "country":
-            locationInfo.country = address[i]["long_name"];
-            break;
-          case "administrative_area_level_1":
-            locationInfo.state = address[i]["long_name"];
-            break;
-          case "locality":
-            locationInfo.city = address[i]["long_name"];
-            break;
-          case "postal_code":
-            locationInfo.postalCode = address[i]["long_name"];
-            break;
-          case "route":
-            locationInfo.street = address[i]["long_name"];
-            break;
-          case "street_number":
-            locationInfo.streetNumber = address[i]["long_name"];
-            break;
-          default:
-            break;
-        }
-      }
-    });
-  }
-};
-// Attach listener to address input field.
-
-
-
 
 
 (function($) {
-  $('#address').focus(function(){
-    googleAutocomplete.autocompleteField("address");
-  })
   "use strict"; // Start of use strict
   
   // Smooth scrolling using jQuery easing
@@ -214,7 +91,6 @@ $('#form-close, .form-overlay').click(function(e) {
 });
 
 function toggleForm(){
-  googleAutocomplete2.autocompleteField("address-pop");
   $(formContainer).toggleClass('expand');
   $(formContainer).children().toggleClass('expand');
   $('body').toggleClass('show-form-overlay');
@@ -261,7 +137,6 @@ $('form').submit(function() {
 
     sendMail(email, name, address, tel, formName, function(){
       $(form).trigger("reset");
-      window.location.href = finalUrl;
     })
 
     $('.thankyou-container').fadeIn()
